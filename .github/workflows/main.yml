@@ -1,0 +1,23 @@
+name: Playwright Tests
+
+on: [push, pull_request]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+          playwright install --with-deps
+      - name: Run tests
+        run: pytest --html=report.html --self-contained-html
+      - name: Upload report
+        uses: actions/upload-artifact@v3
+        with:
+          name: test-report
+          path: report.html
